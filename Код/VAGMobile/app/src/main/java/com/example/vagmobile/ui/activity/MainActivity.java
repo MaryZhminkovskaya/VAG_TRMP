@@ -7,8 +7,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import com.example.vagmobile.R;
+import com.example.vagmobile.ui.fragment.ArtworksFragment;
 import com.example.vagmobile.ui.fragment.HomeFragment;
-import com.example.vagmobile.ui.fragment.GalleryFragment;
 import com.example.vagmobile.ui.fragment.CategoriesFragment;
 import com.example.vagmobile.ui.fragment.ProfileFragment;
 import com.example.vagmobile.util.SharedPreferencesHelper;
@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
                 if (itemId == R.id.nav_home) {
                     selectedFragment = new HomeFragment();
                 } else if (itemId == R.id.nav_gallery) {
-                    selectedFragment = new GalleryFragment();
+                    selectedFragment = new ArtworksFragment();
                 } else if (itemId == R.id.nav_categories) {
                     selectedFragment = new CategoriesFragment();
                 } else if (itemId == R.id.nav_profile) {
@@ -98,14 +98,14 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
-    @Override
-    public void onBackPressed() {
-        // Если мы на главном фрагменте, выходим из приложения
-        if (bottomNavigationView.getSelectedItemId() == R.id.nav_home) {
-            finishAffinity();
-        } else {
-            // Иначе переходим на главный фрагмент
-            bottomNavigationView.setSelectedItemId(R.id.nav_home);
-        }
-    }
+//    @Override
+//    public void onBackPressed() {
+//        // Если мы на главном фрагменте, выходим из приложения
+//        if (bottomNavigationView.getSelectedItemId() == R.id.nav_home) {
+//            finishAffinity();
+//        } else {
+//            // Иначе переходим на главный фрагмент
+//            bottomNavigationView.setSelectedItemId(R.id.nav_home);
+//        }
+//    }
 }

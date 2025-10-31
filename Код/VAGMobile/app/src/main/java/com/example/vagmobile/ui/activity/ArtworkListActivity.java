@@ -4,16 +4,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.example.vagmobile.R;
 import com.example.vagmobile.model.Artwork;
 import com.example.vagmobile.model.User;
 import com.example.vagmobile.ui.adapter.ArtworkAdapter;
 import com.example.vagmobile.viewmodel.ArtworkViewModel;
+import com.example.vagmobile.viewmodel.CategoryViewModel;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +25,7 @@ import java.util.Map;
 public class ArtworkListActivity extends AppCompatActivity {
 
     private ArtworkViewModel artworkViewModel;
+    private CategoryViewModel categoryViewModel; // ДОБАВЬТЕ ЭТУ СТРОКУ
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private TextView tvTitle;
@@ -77,14 +82,15 @@ public class ArtworkListActivity extends AppCompatActivity {
 
     private void observeViewModels() {
         artworkViewModel = new ViewModelProvider(this).get(ArtworkViewModel.class);
+        categoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class); // ДОБАВЬТЕ ЭТУ СТРОКУ
 
         // Observer для всех публикаций
         artworkViewModel.getArtworksResult().observe(this, result -> {
             handleArtworksResult(result);
         });
 
-        // Observer для публикаций по категории
-        artworkViewModel.getCategoryArtworksResult().observe(this, result -> {
+        // Observer для публикаций по категории - ИСПРАВЛЕНО: используем categoryViewModel
+        categoryViewModel.getCategoryArtworksResult().observe(this, result -> {
             handleArtworksResult(result);
         });
 
@@ -120,13 +126,10 @@ public class ArtworkListActivity extends AppCompatActivity {
         progressBar.setVisibility(android.view.View.VISIBLE);
 
         if (categoryId != -1) {
-            // Загрузка по категории
-            artworkViewModel.getCategoryArtworks(categoryId, 0, 20);
+            categoryViewModel.getCategoryArtworks(categoryId, 0, 20);
         } else if ("liked".equals(listType)) {
-            // Загрузка понравившихся
             artworkViewModel.getLikedArtworks(0, 20);
         } else {
-            // Загрузка всех публикаций
             artworkViewModel.getArtworks(0, 20);
         }
     }

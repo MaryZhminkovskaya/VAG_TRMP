@@ -24,21 +24,21 @@ public class ImageUtils {
         }
     }
 
+    // В классе ImageUtils
     public static String convertCategoryIdsToString(List<Long> categoryIds) {
         if (categoryIds == null || categoryIds.isEmpty()) {
             return "";
         }
 
-        StringBuilder builder = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < categoryIds.size(); i++) {
             if (i > 0) {
-                builder.append(",");
+                sb.append(",");
             }
-            builder.append(categoryIds.get(i));
+            sb.append(categoryIds.get(i));
         }
-        return builder.toString();
+        return sb.toString();
     }
-
     public static File uriToFile(Uri uri, Context context) {
         try {
             InputStream inputStream = context.getContentResolver().openInputStream(uri);

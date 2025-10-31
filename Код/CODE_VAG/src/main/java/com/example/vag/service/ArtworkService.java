@@ -40,5 +40,6 @@ public interface ArtworkService {
     Page<Artwork> findByExhibitionId(Long exhibitionId, Pageable pageable);
     Page<Artwork> findAllPaginated(Pageable pageable);
     Page<Artwork> searchApprovedArtworks(String query, Pageable pageable);
+    long countArtworksByCategoryId(Long categoryId);
 
 }

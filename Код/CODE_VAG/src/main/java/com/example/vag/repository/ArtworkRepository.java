@@ -113,4 +113,7 @@ public interface ArtworkRepository extends JpaRepository<Artwork, Long> {
             "(LOWER(a.title) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
             "LOWER(a.description) LIKE LOWER(CONCAT('%', :query, '%')))")
     Page<Artwork> searchApprovedArtworks(@Param("query") String query, Pageable pageable);
+
+    @Query("SELECT COUNT(a) FROM Artwork a JOIN a.categories c WHERE c.id = :categoryId")
+    long countArtworksByCategoryId(@Param("categoryId") Long categoryId);
 }

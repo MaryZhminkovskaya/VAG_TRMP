@@ -245,41 +245,23 @@ public class CreateArtworkActivity extends AppCompatActivity {
                             Category category = convertToCategory(categoryData);
                             if (category != null) {
                                 categoryList.add(category);
-                                Log.d("CreateArtwork", "Loaded category: " + category.getName() + " (ID: " + category.getId() + ")");
                             }
                         }
                         categoryAdapter.notifyDataSetChanged();
                         btnCreateArtwork.setEnabled(true);
 
-                        String message = "Loaded " + categoryList.size() + " categories";
-                        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-
-                        // Показываем подсказку
-                        autoCompleteCategories.setHint("Tap here to select from " + categoryList.size() + " categories");
-
-                        // Логируем все категории для отладки
-                        for (Category cat : categoryList) {
-                            Log.d("CreateArtwork", "Available category: " + cat.getName() + " (ID: " + cat.getId() + ")");
-                        }
-                    } else {
-                        Toast.makeText(this, "No categories available", Toast.LENGTH_LONG).show();
-                        btnCreateArtwork.setEnabled(true);
+                        Toast.makeText(this, "Loaded " + categoryList.size() + " categories", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     String message = (String) result.get("message");
-                    Toast.makeText(this, "Failed to load categories: " + message, Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Failed to load categories: " + message, Toast.LENGTH_SHORT).show();
                     btnCreateArtwork.setEnabled(true);
                 }
-            } else {
-                Toast.makeText(this, "Failed to load categories: null result", Toast.LENGTH_LONG).show();
-                btnCreateArtwork.setEnabled(true);
             }
         });
 
         artworkViewModel.getCreateResult().observe(this, result -> {
-            btnCreateArtwork.setEnabled(true);
-            btnCreateArtwork.setText("Create Artwork");
-            progressBar.setVisibility(View.GONE);
+            resetCreateButton();
 
             if (result != null) {
                 Boolean success = (Boolean) result.get("success");
@@ -289,10 +271,16 @@ public class CreateArtworkActivity extends AppCompatActivity {
                     finish();
                 } else {
                     String message = (String) result.get("message");
-                    Toast.makeText(this, "Failed to create artwork: " + message, Toast.LENGTH_LONG).show();
+                    String errorMessage = "Failed to create artwork";
+                    if (message != null && !message.isEmpty()) {
+                        errorMessage += ": " + message;
+                    }
+                    Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
+                    Log.e("CreateArtwork", "Create artwork failed: " + message);
                 }
             } else {
                 Toast.makeText(this, "Failed to create artwork: null result", Toast.LENGTH_LONG).show();
+                Log.e("CreateArtwork", "Create artwork failed: null result");
             }
         });
     }
@@ -366,14 +354,28 @@ public class CreateArtworkActivity extends AppCompatActivity {
         String title = etTitle.getText().toString().trim();
         String description = etDescription.getText().toString().trim();
 
+        // Валидация заголовка
         if (title.isEmpty()) {
             etTitle.setError("Please enter title");
             etTitle.requestFocus();
             return;
         }
 
+        if (title.length() < 3) {
+            etTitle.setError("Title must be at least 3 characters");
+            etTitle.requestFocus();
+            return;
+        }
+
+        // Валидация описания
         if (description.isEmpty()) {
             etDescription.setError("Please enter description");
+            etDescription.requestFocus();
+            return;
+        }
+
+        if (description.length() < 10) {
+            etDescription.setError("Description must be at least 10 characters");
             etDescription.requestFocus();
             return;
         }
@@ -389,22 +391,57 @@ public class CreateArtworkActivity extends AppCompatActivity {
             return;
         }
 
-        File imageFile = ImageUtils.uriToFile(selectedImageUri, this);
-        if (imageFile == null || !imageFile.exists()) {
-            Toast.makeText(this, "Failed to process image file", Toast.LENGTH_SHORT).show();
-            return;
+        try {
+            File imageFile = ImageUtils.uriToFile(selectedImageUri, this);
+            if (imageFile == null || !imageFile.exists()) {
+                Toast.makeText(this, "Failed to process image file", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            MultipartBody.Part imagePart = ImageUtils.prepareImagePart("imageFile", imageFile);
+
+            // Правильное преобразование categoryIds
+            String categoryIdsString = convertCategoryIdsToString(selectedCategoryIds);
+
+            Log.d("CreateArtwork", "Creating artwork with:");
+            Log.d("CreateArtwork", "Title: " + title);
+            Log.d("CreateArtwork", "Description: " + description);
+            Log.d("CreateArtwork", "Category IDs: " + categoryIdsString);
+            Log.d("CreateArtwork", "Image file: " + imageFile.getAbsolutePath());
+
+            btnCreateArtwork.setEnabled(false);
+            btnCreateArtwork.setText("Creating...");
+            progressBar.setVisibility(View.VISIBLE);
+
+            artworkViewModel.createArtwork(title, description, categoryIdsString, imagePart);
+
+        } catch (Exception e) {
+            Log.e("CreateArtwork", "Error creating artwork: " + e.getMessage(), e);
+            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            resetCreateButton();
+        }
+    }
+    private String convertCategoryIdsToString(List<Long> categoryIds) {
+        if (categoryIds == null || categoryIds.isEmpty()) {
+            return "";
         }
 
-        MultipartBody.Part imagePart = ImageUtils.prepareImagePart("imageFile", imageFile);
-        String categoryIdsString = ImageUtils.convertCategoryIdsToString(selectedCategoryIds);
-
-        btnCreateArtwork.setEnabled(false);
-        btnCreateArtwork.setText("Creating...");
-        progressBar.setVisibility(View.VISIBLE);
-
-        artworkViewModel.createArtwork(title, description, categoryIdsString, imagePart);
+        // Формат: "1,2,3" или просто "2" если один элемент
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < categoryIds.size(); i++) {
+            if (i > 0) {
+                sb.append(",");
+            }
+            sb.append(categoryIds.get(i));
+        }
+        return sb.toString();
     }
 
+    private void resetCreateButton() {
+        btnCreateArtwork.setEnabled(true);
+        btnCreateArtwork.setText("Create Artwork");
+        progressBar.setVisibility(View.GONE);
+    }
     private void resetForm() {
         etTitle.setText("");
         etDescription.setText("");

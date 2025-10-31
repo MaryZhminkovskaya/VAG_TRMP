@@ -2,15 +2,18 @@ package com.example.vagmobile.ui.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import com.example.vagmobile.R;
 import com.example.vagmobile.model.AuthResponse;
 import com.example.vagmobile.util.SharedPreferencesHelper;
 import com.example.vagmobile.viewmodel.AuthViewModel;
+
 import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
@@ -31,6 +34,7 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
+        // Используем AndroidViewModel с Application context
         authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
 
         etUsername = findViewById(R.id.etUsername);
@@ -65,13 +69,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (success != null && success) {
                     AuthResponse authResponse = (AuthResponse) result.get("user");
                     if (authResponse != null) {
-                        Long userId = authResponse.getId();
-                        String username = authResponse.getUsername();
-                        String email = authResponse.getEmail();
-
-                        SharedPreferencesHelper prefs = new SharedPreferencesHelper(this);
-                        prefs.saveUserData(userId, username, email);
-
+                        // Данные уже сохранены в Repository, просто переходим
                         Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(this, MainActivity.class));
                         finish();

@@ -42,8 +42,7 @@ public class CategoryActivity extends AppCompatActivity {
 
     private void setupRecyclerView() {
         categoryAdapter = new CategoryAdapter(categoryList, category -> {
-            // Открываем публикации категории
-            Intent intent = new Intent(CategoryActivity.this, ArtworkListActivity.class);
+            Intent intent = new Intent(CategoryActivity.this, CategoryDetailActivity.class);
             intent.putExtra("category_id", category.getId());
             intent.putExtra("category_name", category.getName());
             startActivity(intent);

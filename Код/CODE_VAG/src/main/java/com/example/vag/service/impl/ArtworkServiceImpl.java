@@ -258,4 +258,9 @@ public class ArtworkServiceImpl implements ArtworkService {
         return artworkRepository.searchApprovedArtworks(query, pageable);
     }
 
+    @Override
+    public long countArtworksByCategoryId(Long categoryId) {
+        return artworkRepository.countArtworksByCategoryId(categoryId);
+    }
+
 }

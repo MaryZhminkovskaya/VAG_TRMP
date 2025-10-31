@@ -5,36 +5,62 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <TextView
-        android:id="@+id/tv_username"
+    <!-- User Info Card -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Username"
-        android:textSize="24sp"
-        android:textStyle="bold" />
+        android:orientation="vertical"
+        android:background="@drawable/card_background"
+        android:padding="16dp"
+        android:layout_marginBottom="16dp">
 
-    <TextView
-        android:id="@+id/tv_email"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="user@example.com"
-        android:textSize="16sp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Profile Information"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="16dp" />
 
+        <TextView
+            android:id="@+id/tv_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Username"
+            android:textSize="16sp"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/tv_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Email"
+            android:textSize="14sp"
+            android:textColor="#666" />
+
+    </LinearLayout>
+
+    <!-- Buttons -->
     <Button
         android:id="@+id/btn_view_profile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="View Full Profile" />
+        android:text="View Full Profile"
+        android:layout_marginBottom="8dp" />
+
+    <Button
+        android:id="@+id/btn_admin_categories"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Manage Categories"
+        android:visibility="gone"
+        android:layout_marginBottom="8dp" />
 
     <Button
         android:id="@+id/btn_logout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:backgroundTint="@color/red"
         android:text="Logout"
-        android:textColor="@color/white" />
+        android:backgroundTint="#ff4444" />
 
 </LinearLayout>

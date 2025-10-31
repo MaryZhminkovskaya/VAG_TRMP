@@ -4,101 +4,53 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.vagmobile.network.ApiClient;
-import com.example.vagmobile.network.ApiService;
+import com.example.vagmobile.repository.CategoryRepository;
 
-import java.util.HashMap;
 import java.util.Map;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 public class CategoryViewModel extends ViewModel {
+    private CategoryRepository categoryRepository;
     private MutableLiveData<Map<String, Object>> categoriesResult = new MutableLiveData<>();
     private MutableLiveData<Map<String, Object>> categoryResult = new MutableLiveData<>();
     private MutableLiveData<Map<String, Object>> categoryArtworksResult = new MutableLiveData<>();
 
+    // Новые LiveData для операций CRUD
+    private MutableLiveData<Map<String, Object>> createCategoryResult = new MutableLiveData<>();
+    private MutableLiveData<Map<String, Object>> updateCategoryResult = new MutableLiveData<>();
+    private MutableLiveData<Map<String, Object>> deleteCategoryResult = new MutableLiveData<>();
+
     public CategoryViewModel() {
-        // repository больше не нужен, работаем напрямую с API
+        categoryRepository = new CategoryRepository();
     }
 
     public void getCategories() {
-        ApiClient.getClient().create(ApiService.class).getCategories()
-                .enqueue(new Callback<Map<String, Object>>() {
-                    @Override
-                    public void onResponse(Call<Map<String, Object>> call,
-                                           Response<Map<String, Object>> response) {
-                        if (response.isSuccessful() && response.body() != null) {
-                            categoriesResult.setValue(response.body());
-                        } else {
-                            Map<String, Object> error = new HashMap<>();
-                            error.put("success", false);
-                            error.put("message", "Failed to load categories: " + response.message());
-                            categoriesResult.setValue(error);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<Map<String, Object>> call, Throwable t) {
-                        Map<String, Object> error = new HashMap<>();
-                        error.put("success", false);
-                        error.put("message", "Network error: " + t.getMessage());
-                        categoriesResult.setValue(error);
-                    }
-                });
-    }
-
-    public void getCategory(Long categoryId) {
-        ApiClient.getClient().create(ApiService.class).getCategory(categoryId)
-                .enqueue(new Callback<Map<String, Object>>() {
-                    @Override
-                    public void onResponse(Call<Map<String, Object>> call,
-                                           Response<Map<String, Object>> response) {
-                        if (response.isSuccessful() && response.body() != null) {
-                            categoryResult.setValue(response.body());
-                        } else {
-                            Map<String, Object> error = new HashMap<>();
-                            error.put("success", false);
-                            error.put("message", "Failed to load category");
-                            categoryResult.setValue(error);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<Map<String, Object>> call, Throwable t) {
-                        Map<String, Object> error = new HashMap<>();
-                        error.put("success", false);
-                        error.put("message", "Network error: " + t.getMessage());
-                        categoryResult.setValue(error);
-                    }
-                });
+        categoryRepository.getCategories().observeForever(result -> {
+            categoriesResult.setValue(result);
+        });
     }
 
     public void getCategoryArtworks(Long categoryId, int page, int size) {
-        ApiClient.getClient().create(ApiService.class).getCategoryArtworks(categoryId, page, size)
-                .enqueue(new Callback<Map<String, Object>>() {
-                    @Override
-                    public void onResponse(Call<Map<String, Object>> call,
-                                           Response<Map<String, Object>> response) {
-                        if (response.isSuccessful() && response.body() != null) {
-                            categoryArtworksResult.setValue(response.body());
-                        } else {
-                            Map<String, Object> error = new HashMap<>();
-                            error.put("success", false);
-                            error.put("message", "Failed to load category artworks");
-                            categoryArtworksResult.setValue(error);
-                        }
-                    }
+        categoryRepository.getCategoryArtworks(categoryId, page, size).observeForever(result -> {
+            categoryArtworksResult.setValue(result);
+        });
+    }
 
-                    @Override
-                    public void onFailure(Call<Map<String, Object>> call, Throwable t) {
-                        Map<String, Object> error = new HashMap<>();
-                        error.put("success", false);
-                        error.put("message", "Network error: " + t.getMessage());
-                        categoryArtworksResult.setValue(error);
-                    }
-                });
+    public void createCategory(String name, String description) {
+        categoryRepository.createCategory(name, description).observeForever(result -> {
+            createCategoryResult.setValue(result);
+        });
+    }
+
+    public void updateCategory(Long categoryId, String name, String description) {
+        categoryRepository.updateCategory(categoryId, name, description).observeForever(result -> {
+            updateCategoryResult.setValue(result);
+        });
+    }
+
+    public void deleteCategory(Long categoryId) {
+        categoryRepository.deleteCategory(categoryId).observeForever(result -> {
+            deleteCategoryResult.setValue(result);
+        });
     }
 
     public LiveData<Map<String, Object>> getCategoriesResult() {
@@ -111,5 +63,17 @@ public class CategoryViewModel extends ViewModel {
 
     public LiveData<Map<String, Object>> getCategoryArtworksResult() {
         return categoryArtworksResult;
+    }
+
+    public LiveData<Map<String, Object>> getCreateCategoryResult() {
+        return createCategoryResult;
+    }
+
+    public LiveData<Map<String, Object>> getUpdateCategoryResult() {
+        return updateCategoryResult;
+    }
+
+    public LiveData<Map<String, Object>> getDeleteCategoryResult() {
+        return deleteCategoryResult;
     }
 }

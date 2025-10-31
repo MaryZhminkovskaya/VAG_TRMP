@@ -75,12 +75,11 @@ public class ArtworkViewModel extends ViewModel {
         });
     }
 
-    // Добавьте эти методы
-    public void getCategoryArtworks(Long categoryId, int page, int size) {
-        artworkRepository.getCategoryArtworks(categoryId, page, size).observeForever(result -> {
-            categoryArtworksResult.setValue(result);
-        });
-    }
+//    public void getCategoryArtworks(Long categoryId, int page, int size) {
+//        artworkRepository.getCategoryArtworks(categoryId, page, size).observeForever(result -> {
+//            categoryArtworksResult.setValue(result);
+//        });
+//    }
 
     public void getLikedArtworks(int page, int size) {
         artworkRepository.getLikedArtworks(page, size).observeForever(result -> {
