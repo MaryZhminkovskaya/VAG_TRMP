@@ -1,0 +1,97 @@
+package com.example.vagmobile.network;
+
+import java.util.Map;
+
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.http.Body;
+import retrofit2.http.DELETE;
+import retrofit2.http.GET;
+import retrofit2.http.Multipart;
+import retrofit2.http.POST;
+import retrofit2.http.PUT;
+import retrofit2.http.Part;
+import retrofit2.http.Path;
+import retrofit2.http.Query;
+
+public interface ApiService {
+
+    @POST("vag/api/mobile/auth/login")
+    Call<Map<String, Object>> login(@Body Map<String, String> loginRequest);
+
+    @POST("vag/api/mobile/auth/register")
+    Call<Map<String, Object>> register(@Body Map<String, String> registerRequest);
+
+    @GET("vag/api/mobile/categories")
+    Call<Map<String, Object>> getCategories();
+
+    @POST("vag/api/mobile/categories")
+    Call<Map<String, Object>> createCategory(@Body Map<String, String> categoryData);
+
+    @PUT("vag/api/mobile/categories/{id}")
+    Call<Map<String, Object>> updateCategory(
+            @Path("id") Long categoryId,
+            @Body Map<String, String> categoryData
+    );
+
+    @DELETE("vag/api/mobile/categories/{id}")
+    Call<Map<String, Object>> deleteCategory(@Path("id") Long categoryId);
+
+    @GET("vag/api/mobile/categories/{id}/artworks")
+    Call<Map<String, Object>> getCategoryArtworks(
+            @Path("id") Long id,
+            @Query("page") int page,
+            @Query("size") int size
+    );
+
+    @GET("vag/api/mobile/artworks")
+    Call<Map<String, Object>> getArtworks(@Query("page") int page, @Query("size") int size);
+
+    @GET("vag/api/mobile/artworks/{id}")
+    Call<Map<String, Object>> getArtwork(@Path("id") Long id);
+
+    @Multipart
+    @POST("vag/api/mobile/artworks/create")
+    Call<Map<String, Object>> createArtwork(
+            @Part("title") RequestBody title,
+            @Part("description") RequestBody description,
+            @Part("categoryIds") RequestBody categoryIds,
+            @Part MultipartBody.Part imageFile
+    );
+
+    @POST("vag/api/mobile/artworks/{id}/like")
+    Call<Map<String, Object>> likeArtwork(@Path("id") Long id);
+
+    @POST("vag/api/mobile/artworks/{id}/unlike")
+    Call<Map<String, Object>> unlikeArtwork(@Path("id") Long id);
+
+    @Multipart
+    @POST("vag/api/mobile/artworks/{id}/comment")
+    Call<Map<String, Object>> addComment(@Path("id") Long id, @Part("content") RequestBody content);
+
+    @GET("vag/api/mobile/artworks/search")
+    Call<Map<String, Object>> searchArtworks(
+            @Query("query") String query,
+            @Query("page") int page,
+            @Query("size") int size
+    );
+
+    @GET("vag/api/mobile/categories/{id}")
+    Call<Map<String, Object>> getCategory(@Path("id") Long id);
+
+    @GET("vag/api/mobile/users/profile")
+    Call<Map<String, Object>> getCurrentUserProfile();
+
+    @GET("vag/api/mobile/users/{userId}")
+    Call<Map<String, Object>> getUserProfile(@Path("userId") Long userId);
+
+    @GET("vag/api/mobile/users/{userId}/artworks")
+    Call<Map<String, Object>> getUserArtworks(
+            @Path("userId") Long userId,
+            @Query("page") int page,
+            @Query("size") int size
+    );
+
+    @GET("vag/api/mobile/users/liked/artworks")
+    Call<Map<String, Object>> getLikedArtworks(@Query("page") int page, @Query("size") int size);}
