@@ -31,7 +31,7 @@
 
 *Типичный путь работы в системе:*
 
-1. **Создание** → Заполнение [![Форма публикации](https://wallpapers.com/images/hd/kitten-pictures-uia1gi79yw5himz4.jpg)](../publications/creating/README.md)
+1. **Создание** → Заполнение [![Форма публикации](https://yandex.ru/images/search?from=tabbar&img_url=https%3A%2F%2Fmsk.top-academy.ru%2F_images%2FI9kj-XH2-ql6dcRRwFBsC_361WQ%3D%2Fimages%2F692c5eeb-5f77-4c81-a437-5749c56ea4a5.jpg&lr=10716&p=1&pos=4&rpt=simage&text=%D0%BA%D0%B0%D1%80%D1%82%D0%B8%D0%BD%D0%BA%D0%B0%20%D1%81%D0%BE%D0%B7%D0%B4%D0%B0%D0%BD%D0%B8%D1%8F)](../publications/creating/README.md)
 2. **Модерация** → Проверка модератором (4-8 часов)
 3. **Публикация** → Появление в галерее
 4. **Участие** → Добавление в выставки
