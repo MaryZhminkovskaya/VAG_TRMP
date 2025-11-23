@@ -31,7 +31,7 @@
 
 *Типичный путь работы в системе:*
 
-1. **Создание** → Заполнение [![Форма публикации](C:\Users\user\Desktop\VAG_TRMP\Техническая документация\Жминьковская\docs\images\publication_form.png)](../publications/creating/README.md)
+1. **Создание** → Заполнение [![Форма публикации](https://wallpapers.com/images/hd/kitten-pictures-uia1gi79yw5himz4.jpg)](../publications/creating/README.md)
 2. **Модерация** → Проверка модератором (4-8 часов)
 3. **Публикация** → Появление в галерее
 4. **Участие** → Добавление в выставки
