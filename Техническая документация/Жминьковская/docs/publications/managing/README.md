@@ -56,4 +56,4 @@
 
 ---
 
-[Создание публикаций](../creating/README.md) | [Формы публикаций](../../forms/README.md)
+[Руководство к публикациям](../../publications/README.md) | [Создание публикаций](../creating/README.md)
