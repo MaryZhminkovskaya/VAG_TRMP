@@ -31,4 +31,4 @@
 
 ---
 
-[Руководство к публикациям](../../publications/README.md) |  [Управление публикациями](../publications/managing/README.md) | [Формы публикаций](../../forms/README.md)
+[Руководство к публикациям](../../publications/README.md) |  [Управление публикациями](../managing/README.md) | [Формы публикаций](../../forms/README.md)
