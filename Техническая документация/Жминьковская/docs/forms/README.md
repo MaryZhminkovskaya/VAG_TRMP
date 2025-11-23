@@ -24,7 +24,7 @@
 
 *Интерфейс формы создания включает:*
 
-![Форма создания публикации](../images/publication_form.png) { width: 200px; }
+![Форма создания публикации](../images/publication_form.png)
 
 *Элементы управления:*
 
@@ -68,4 +68,4 @@
 
 ---
 
-[Создание публикаций](../publications/creating/) | [Частые вопросы](../faq/)
+[Создание публикаций](../publications/creating/README.md) | [Частые вопросы](../faq/README.md)
